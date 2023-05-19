@@ -78,15 +78,20 @@ function reminder(noteId, title) {
   //   if (window.innerWidth > 660) titleTag.focus();
   var minutes;
   minutes = prompt("Notify in: (seconds)");
+  if(minutes != null) {
   var fminutes = minutes * 1000;
   // setTimeout(alertrrem, fminutes, [noteId,title]);
   setTimeout(function () {
     alertrrem(noteId, title);
   }, fminutes);
 }
+}
 function alertrrem(noteId, title) {
   // alert("Reminder for " + title);
   const notification = new Notification("Reminder for " + title);
+  var audio = new Audio('maharaj.mp3');
+  audio.play();
+  
 }
 
 function showMenu(elem) {
