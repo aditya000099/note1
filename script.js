@@ -71,27 +71,22 @@ showNotes();
 function reminder(noteId, title) {
   noteId = noteId;
   title = title;
-  //   // popupTitle.innerText = "Set Reminder";
-  //   // addBtn.innerText = "Notify";
-  //   rempopup.classList.add("show");
-  //   document.querySelector("body").style.overflow = "hidden";
-  //   if (window.innerWidth > 660) titleTag.focus();
   var minutes;
   minutes = prompt("Notify in: (seconds)");
-  if(minutes != null) {
-  var fminutes = minutes * 1000;
-  // setTimeout(alertrrem, fminutes, [noteId,title]);
-  setTimeout(function () {
-    alertrrem(noteId, title);
-  }, fminutes);
-}
+  if (minutes != null) {
+    var fminutes = minutes * 1000;
+    setTimeout(function () {
+      alertrrem(noteId, title);
+    }, fminutes);
+  }
 }
 function alertrrem(noteId, title) {
-  // alert("Reminder for " + title);
-  const notification = new Notification("Reminder for " + title);
-  var audio = new Audio('maharaj.mp3');
+  const notification = new Notification("NOTEFY", {
+    body: "Reminder for " + title,
+    icon: "bell1.png",
+  });
+  var audio = new Audio("maharaj.mp3");
   audio.play();
-  
 }
 
 function showMenu(elem) {
@@ -152,8 +147,7 @@ addBtn.addEventListener("click", (e) => {
   }
 });
 
-
-//net
+//notification api
 function notifyMe() {
   if (!("Notification" in window)) {
     // Check if the browser supports notifications
@@ -168,14 +162,79 @@ function notifyMe() {
     Notification.requestPermission().then((permission) => {
       // If the user accepts, let's create a notification
       if (permission === "granted") {
-        const notification = new Notification("Notifications Enabled Successfully");
+        const notification = new Notification(
+          "Notifications Enabled Successfully"
+        );
         // …
       }
     });
   }
-
   // At last, if the user has denied notifications, and you
   // want to be respectful there is no need to bother them anymore.
 }
 
 notifyMe();
+// function searchnotes() {
+//   const notessearch = JSON.parse(localStorage.getItem("notes") || "[]");
+
+//   let search = document.getElementsByClass('searchbar').value;
+//   var length = notessearch.length;
+//   console.log(length);
+//   // let noteCards = document.getElementsByClassName('notes');
+//   Array.from(notessearch).forEach(function (element) {
+//     let cardTxt = element.getElementsByClass("p")[0].innerText;
+//     let cardTxt1 = element.getElementsByClass("span")[0].innerText;
+//     if (cardTxt.includes(search) || cardTxt1.includes(search)) {
+//       element.style.display = "block";
+//     }
+//     else {
+//       element.style.display = "none";
+//     }
+//   })
+// }
+
+function searchNotes() {
+  const notessearch = JSON.parse(localStorage.getItem("notes") || "[]");
+  var search = document.getElementById("searchQuery").value;
+  console.log(search);
+
+  var arrlength = notessearch.length;
+  var i;
+  const matchednotes = [];
+  for (i = 0; i < arrlength; i++) {
+    // to search in notes
+
+    var cardTxt = notessearch[i].title;
+    var cardTxt1 = notessearch[i].description;
+    if (cardTxt.includes(search) || cardTxt1.includes(search)) {
+      console.log("matched");
+      matchednotes.push(notessearch[i]);
+    }
+  }
+  var j = matchednotes.length;
+  for (var k = 0; k < j; k++) {
+    console.log(matchednotes[k]);
+
+    let mnotes = `<li class="note">
+                        <div class="details">
+                            <p>${matchednotes[k].title}</p>
+                            
+                            <span>${matchednotes[k].description}</span>
+                        </div>
+                        <div class="bottom-content">
+                            <span>${matchednotes[k].date}</span>
+                            <div class="settings">
+                                <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
+                                
+                            </div>
+                        </div>
+                    </li>`;
+    
+    addBox.insertAdjacentHTML("afterend", mnotes);
+  }
+
+  // showing matched notes
+  
+
+}
+searchnotes();
