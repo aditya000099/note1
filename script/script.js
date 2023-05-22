@@ -6,10 +6,7 @@ const addBox = document.querySelector(".add-box"),
   titleTag = popupBox.querySelector("input"),
   descTag = popupBox.querySelector("textarea"),
   addBtn = popupBox.querySelector("button");
-  snotehtml = document.querySelector(".snotehtml");
-  snotes = document.querySelector(".snotes");
-  ldmode = document.querySelector(".ldmode");
-  notetitle = document.querySelector(".notetitle");
+notetitle = document.querySelector(".notetitle");
 
 const months = [
   "January",
@@ -29,8 +26,11 @@ const notes = JSON.parse(localStorage.getItem("notes") || "[]");
 let isUpdate = false,
   updateId;
 
+// includes('lscript.js');
+
 addBox.addEventListener("click", () => {
   popupTitle.innerText = "Add a new Note";
+  popupTitle.readOnly = false;
   addBtn.innerText = "Add Note";
   popupBox.classList.add("show");
   document.querySelector("body").style.overflow = "hidden";
@@ -50,7 +50,7 @@ function showNotes() {
   notes.forEach((note, id) => {
     let filterDesc = note.description.replaceAll("\n", "<br/>");
     let liTag = `<li class="note">
-                        <div class="details">
+                        <div class="details" onclick="clickNote(${id}, '${note.title}', '${filterDesc}')">
                             <p>${note.title}</p>
                             
                             <span>${filterDesc}</span>
@@ -87,7 +87,7 @@ function reminder(noteId, title) {
 function alertrrem(noteId, title) {
   const notification = new Notification("NOTEFY", {
     body: "Reminder for " + title,
-    icon: "bell1.png",
+    icon: "img/bell1.png",
   });
   // var audio = new Audio("maharaj.mp3");
   // audio.play();
@@ -116,9 +116,25 @@ function updateNote(noteId, title, filterDesc) {
   isUpdate = true;
   addBox.click();
   titleTag.value = title;
+  titleTag.readOnly = false;
   descTag.value = description;
-  popupTitle.innerText = "Update a Note";
-  addBtn.innerText = "Update Note";
+  descTag.readOnly = false;
+  popupTitle.innerText = "Update Note";
+  addBtn.innerText = "Update";
+  addBtn.hidden = false;
+}
+
+function clickNote(noteId, title, filterDesc) {
+  let description = filterDesc.replaceAll("<br/>", "\r\n");
+  updateId = noteId;
+  isUpdate = true;
+  addBox.click();
+  titleTag.value = title;
+  titleTag.readOnly = true;
+  descTag.value = description;
+  descTag.readOnly = true;
+  popupTitle.innerText = "Viewing";
+  addBtn.hidden = true;
 }
 
 addBtn.addEventListener("click", (e) => {
@@ -179,31 +195,25 @@ function notifyMe() {
 
 notifyMe();
 
+// refresh
+function checkRefresh() {
+  var entries = performance.getEntriesByType("navigation");
+  var reloadType = "reload";
+
+  for (var i = 0; i < entries.length; i++) {
+    if (entries[i].type === reloadType) {
+      // Page has been refreshed, redirect to another HTML file
+      window.location.href = "loader.html";
+      break;
+    }
+  }
+}
+window.onload = checkRefresh;
 
 
 
 
-
-
-// function searchnotes() {
-//   const notessearch = JSON.parse(localStorage.getItem("notes") || "[]");
-
-//   let search = document.getElementsByClass('searchbar').value;
-//   var length = notessearch.length;
-//   console.log(length);
-//   // let noteCards = document.getElementsByClassName('notes');
-//   Array.from(notessearch).forEach(function (element) {
-//     let cardTxt = element.getElementsByClass("p")[0].innerText;
-//     let cardTxt1 = element.getElementsByClass("span")[0].innerText;
-//     if (cardTxt.includes(search) || cardTxt1.includes(search)) {
-//       element.style.display = "block";
-//     }
-//     else {
-//       element.style.display = "none";
-//     }
-//   })
-// }
-
+//Search (Not Working)
 function searchNotes() {
   const notessearch = JSON.parse(localStorage.getItem("notes") || "[]");
   var search = document.getElementById("searchQuery").value;
@@ -226,17 +236,5 @@ function searchNotes() {
     console.log(matchednotes[k]);
     // showing matched notes
   }
-// searchnotes();
-}
-
-
-
-function bgcolor() {
-  document.body.style.background = "#e8e8e8";
-  document.notes.style.background = "#e8e8e8";
-  notetitle.style.background = "black";
-  
-}
-function bgcolor2() {
-  document.body.style.background = "#0a0918";
+  // searchnotes();
 }
