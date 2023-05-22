@@ -1,3 +1,3 @@
-# note1
+# N O T E F Y
 
-Just a regular project
+Not your regular notes app}
