@@ -6,6 +6,10 @@ const addBox = document.querySelector(".add-box"),
   titleTag = popupBox.querySelector("input"),
   descTag = popupBox.querySelector("textarea"),
   addBtn = popupBox.querySelector("button");
+  snotehtml = document.querySelector(".snotehtml");
+  snotes = document.querySelector(".snotes");
+  ldmode = document.querySelector(".ldmode");
+  notetitle = document.querySelector(".notetitle");
 
 const months = [
   "January",
@@ -85,8 +89,8 @@ function alertrrem(noteId, title) {
     body: "Reminder for " + title,
     icon: "bell1.png",
   });
-  var audio = new Audio("maharaj.mp3");
-  audio.play();
+  // var audio = new Audio("maharaj.mp3");
+  // audio.play();
 }
 
 function showMenu(elem) {
@@ -174,6 +178,13 @@ function notifyMe() {
 }
 
 notifyMe();
+
+
+
+
+
+
+
 // function searchnotes() {
 //   const notessearch = JSON.parse(localStorage.getItem("notes") || "[]");
 
@@ -207,34 +218,25 @@ function searchNotes() {
     var cardTxt = notessearch[i].title;
     var cardTxt1 = notessearch[i].description;
     if (cardTxt.includes(search) || cardTxt1.includes(search)) {
-      console.log("matched");
-      matchednotes.push(notessearch[i]);
+      if (!(notessearch[i] in matchednotes)) matchednotes.push(notessearch[i]);
     }
   }
   var j = matchednotes.length;
   for (var k = 0; k < j; k++) {
     console.log(matchednotes[k]);
-
-    let mnotes = `<li class="note">
-                        <div class="details">
-                            <p>${matchednotes[k].title}</p>
-                            
-                            <span>${matchednotes[k].description}</span>
-                        </div>
-                        <div class="bottom-content">
-                            <span>${matchednotes[k].date}</span>
-                            <div class="settings">
-                                <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
-                                
-                            </div>
-                        </div>
-                    </li>`;
-    
-    addBox.insertAdjacentHTML("afterend", mnotes);
+    // showing matched notes
   }
-
-  // showing matched notes
-  
-
+// searchnotes();
 }
-searchnotes();
+
+
+
+function bgcolor() {
+  document.body.style.background = "#e8e8e8";
+  document.notes.style.background = "#e8e8e8";
+  notetitle.style.background = "black";
+  
+}
+function bgcolor2() {
+  document.body.style.background = "#0a0918";
+}
